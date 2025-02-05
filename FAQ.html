@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ Section</title>
+  <style>
+    /* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.faq-container {
+  width: 80%;
+  max-width: 700px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.faq-container h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+.faq-item {
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+}
+
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.faq-question h3 {
+  font-size: 1.2rem;
+  color: #2c3e50;
+}
+
+.toggle-icon {
+  font-size: 1.5rem;
+  color: #2c3e50;
+  transition: transform 0.3s ease;
+}
+
+.faq-answer {
+  display: none;
+  padding-top: 10px;
+  color: #555;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.faq-answer p {
+  margin: 0;
+}
+
+  </style>
+</head>
+<body>
+  <div class="faq-container">
+    <h1>Frequently Asked Questions</h1>
+    <div class="faq-item">
+      <div class="faq-question">
+        <h3>What is this platform about?</h3>
+        <span class="toggle-icon">+</span>
+      </div>
+      <div class="faq-answer">
+        <p>This platform is designed to provide personalized investment advice and educational resources to users, helping them make informed financial decisions.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question">
+        <h3>Is there a cost to use this service?</h3>
+        <span class="toggle-icon">+</span>
+      </div>
+      <div class="faq-answer">
+        <p>No, our basic services are free to use. Additional premium features may have associated costs.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question">
+        <h3>How do I start investing?</h3>
+        <span class="toggle-icon">+</span>
+      </div>
+      <div class="faq-answer">
+        <p>Simply sign up, provide your preferences, and our system will suggest investment schemes tailored to your goals.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question">
+        <h3>Is my data secure?</h3>
+        <span class="toggle-icon">+</span>
+      </div>
+      <div class="faq-answer">
+        <p>Yes, we prioritize your data security with advanced encryption and privacy measures.</p>
+      </div>
+    </div>
+  </div>
+  <script>
+      // Select all FAQ items
+const faqItems = document.querySelectorAll('.faq-item');
+
+// Add click event listeners to each FAQ question
+faqItems.forEach(item => {
+  const question = item.querySelector('.faq-question');
+  const answer = item.querySelector('.faq-answer');
+  const icon = item.querySelector('.toggle-icon');
+
+  question.addEventListener('click', () => {
+    // Toggle answer visibility
+    answer.style.display = answer.style.display === 'block' ? 'none' : 'block';
+    
+    // Toggle "+" and "-" icon
+    icon.textContent = icon.textContent === '+' ? '−' : '+';
+
+    // Optional: Collapse other open FAQ answers
+    faqItems.forEach(otherItem => {
+      if (otherItem !== item) {
+        const otherAnswer = otherItem.querySelector('.faq-answer');
+        const otherIcon = otherItem.querySelector('.toggle-icon');
+        otherAnswer.style.display = 'none';
+        otherIcon.textContent = '+';
+      }
+    });
+  });
+});
+
+  </script>
+</body>
+</html>

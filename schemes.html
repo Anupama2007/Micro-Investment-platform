@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Investment Scheme Recommender</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: 80%;
+  max-width: 700px;
+  margin: 20px auto;
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+h1, h2 {
+  text-align: center;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007BFF;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+#results {
+  margin-top: 20px;
+  padding: 10px;
+  background: #e9ecef;
+  border-radius: 5px;
+}
+
+  </style>
+  
+</head>
+<body>
+  <div class="container">
+    <h1>Investment Scheme Recommender</h1>
+    <form id="filterForm">
+      <div class="form-group">
+        <label for="age">Age Range:</label>
+        <select id="age" required>
+          <option value="">Select Age Range</option>
+          <option value="below18">Below 18</option>
+          <option value="18to40">18–40</option>
+          <option value="18andAbove">18 and Above</option>
+          <option value="60andAbove">60 and Above</option>
+          <option value="18to65">18–65</option>
+          <option value="anyAge">Any Age</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="gender">Gender:</label>
+        <select id="gender" required>
+          <option value="">Select Gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="both">Both</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="investment">Investment Range:</label>
+        <select id="investment" required>
+          <option value="">Select Investment Range</option>
+          <option value="low">₹500–₹2,000</option>
+          <option value="medium">₹5,000–₹15,000</option>
+          <option value="high">₹20,000 and above</option>
+        </select>
+      </div>
+      <button type="button" id="filterBtn">Find Schemes</button>
+    </form>
+    <h2>Recommended Schemes</h2>
+    <div id="results"></div>
+  </div>
+  <script>
+    const schemes = [
+  {
+    name: "Sukanya Samriddhi Yojana (SSY)",
+    age: "below18",
+    gender: "female",
+    investment: "low",
+  },
+  {
+    name: "Atal Pension Yojana",
+    age: "18to40",
+    gender: "both",
+    investment: "low",
+  },
+  {
+    name: "Pradhan Mantri Jan Dhan Yojana (PMJDY)",
+    age: "18andAbove",
+    gender: "both",
+    investment: "low",
+  },
+  {
+    name: "Senior Citizens Savings Scheme (SCSS)",
+    age: "60andAbove",
+    gender: "both",
+    investment: "high",
+  },
+  {
+    name: "National Pension Scheme (NPS)",
+    age: "18to65",
+    gender: "both",
+    investment: "medium",
+  },
+  {
+    name: "National Savings Certificate (NSC)",
+    age: "anyAge",
+    gender: "both",
+    investment: "medium",
+  },
+  {
+    name: "Kisan Vikas Patra (KVP)",
+    age: "anyAge",
+    gender: "both",
+    investment: "medium",
+  },
+  {
+    name: "Post Office Monthly Income Scheme (POMIS)",
+    age: "anyAge",
+    gender: "both",
+    investment: "medium",
+  },
+  {
+    name: "Fixed Deposits (FDs)",
+    age: "anyAge",
+    gender: "both",
+    investment: "medium",
+  },
+  {
+    name: "Sovereign Gold Bonds (SGB)",
+    age: "anyAge",
+    gender: "both",
+    investment: "medium",
+  },
+  {
+    name: "Debt Mutual Funds",
+    age: "anyAge",
+    gender: "both",
+    investment: "low",
+  },
+  {
+    name: "Gold (Physical Gold, Gold ETFs)",
+    age: "anyAge",
+    gender: "both",
+    investment: "high",
+  },
+];
+
+document.getElementById("filterBtn").addEventListener("click", () => {
+  const age = document.getElementById("age").value;
+  const gender = document.getElementById("gender").value;
+  const investment = document.getElementById("investment").value;
+
+  if (!age || !gender || !investment) {
+    alert("Please select all options!");
+    return;
+  }
+
+  const results = schemes.filter(
+    (scheme) =>
+      (scheme.age === age || scheme.age === "anyAge") &&
+      (scheme.gender === gender || scheme.gender === "both") &&
+      scheme.investment === investment
+  );
+
+  displayResults(results);
+});
+
+function displayResults(results) {
+  const resultsDiv = document.getElementById("results");
+  resultsDiv.innerHTML = "";
+
+  if (results.length > 0) {
+    results.forEach((scheme) => {
+      const schemeElement = document.createElement("p");
+      schemeElement.textContent = `• ${scheme.name}`;
+      resultsDiv.appendChild(schemeElement);
+    });
+  } else {
+    resultsDiv.innerHTML = "<p>No schemes found matching the criteria.</p>";
+  }
+}
+
+  </script>
+</body>
+</html>

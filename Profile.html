@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile Creation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #555;
+        }
+
+        label {
+            display: block;
+            margin: 15px 0 5px;
+        }
+
+        input, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #profilePreview {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #profilePreview img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Create Your Profile</h1>
+        <form id="profileForm" enctype="multipart/form-data">
+            <label for="name">Full Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" name="dob" required>
+
+            <label for="bio">Bio:</label>
+            <textarea id="bio" name="bio" rows="4" placeholder="Tell us about yourself..." required></textarea>
+
+            <label for="profilePicture">Profile Picture:</label>
+            <input type="file" id="profilePicture" name="profilePicture" accept="image/*" required>
+
+            <button type="submit">Create Profile</button>
+        </form>
+
+        <div id="profilePreview" class="hidden">
+            <h2>Profile Preview</h2>
+            <img id="previewImage" alt="Profile Picture">
+            <p><strong>Name:</strong> <span id="previewName"></span></p>
+            <p><strong>Email:</strong> <span id="previewEmail"></span></p>
+            <p><strong>Date of Birth:</strong> <span id="previewDOB"></span></p>
+            <p><strong>Bio:</strong> <span id="previewBio"></span></p>
+        </div>
+
+        <div id="savedProfile" class="hidden">
+            <h2>Saved Profile</h2>
+            <div id="profileDetails"></div>
+            <button id="deleteBtn">Delete Profile</button>
+        </div>
+    </div>
+
+    <script>
+        // Handle form submission to save profile
+        document.getElementById('profileForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const bio = document.getElementById('bio').value;
+            const dob = document.getElementById('dob').value;
+            const profilePicture = document.getElementById('profilePicture').files[0];
+
+            if (name && email && bio && profilePicture) {
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    const profileData = {
+                        name,
+                        email,
+                        bio,
+                        dob,
+                        profilePicture: reader.result // Save the base64 image string
+                    };
+
+                    // Save the profile data to localStorage
+                    localStorage.setItem('userProfile', JSON.stringify(profileData));
+
+                    // Display the saved profile
+                    displaySavedProfile();
+                    alert('Profile saved successfully!');
+                };
+
+                reader.readAsDataURL(profilePicture); // Convert image to base64
+            } else {
+                alert('Please fill in all required fields.');
+            }
+        });
+
+        // Handle profile deletion
+        document.getElementById('deleteBtn').addEventListener('click', () => {
+            if (confirm('Are you sure you want to delete the saved profile?')) {
+                localStorage.removeItem('userProfile');
+                displaySavedProfile();
+                alert('Profile deleted successfully!');
+            }
+        });
+
+        // Display saved profile if it exists
+        function displaySavedProfile() {
+            const savedProfile = JSON.parse(localStorage.getItem('userProfile'));
+            const profilePreview = document.getElementById('profilePreview');
+            const savedProfileSection = document.getElementById('savedProfile');
+            const profileDetails = document.getElementById('profileDetails');
+
+            if (savedProfile) {
+                // Show saved profile preview
+                profilePreview.classList.remove('hidden');
+                savedProfileSection.classList.remove('hidden');
+
+                // Set the preview data
+                document.getElementById('previewImage').src = savedProfile.profilePicture;
+                document.getElementById('previewName').textContent = savedProfile.name;
+                document.getElementById('previewEmail').textContent = savedProfile.email;
+                document.getElementById('previewDOB').textContent = savedProfile.dob;
+                document.getElementById('previewBio').textContent = savedProfile.bio;
+
+                // Show the saved profile details
+                profileDetails.innerHTML = `
+                    <p><strong>Name:</strong> ${savedProfile.name}</p>
+                    <p><strong>Email:</strong> ${savedProfile.email}</p>
+                    <p><strong>Bio:</strong> ${savedProfile.bio}</p>
+                    <p><strong>Date of Birth:</strong> ${savedProfile.dob}</p>
+                    <img src="${savedProfile.profilePicture}" alt="Profile Picture" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;">
+                `;
+            } else {
+                // No saved profile
+                profilePreview.classList.add('hidden');
+                savedProfileSection.classList.add('hidden');
+            }
+        }
+
+        // Display saved profile on page load
+        displaySavedProfile();
+    </script>
+</body>
+</html>
